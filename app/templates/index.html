@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="grid">
+  <div class="card">
+    <h2>Dodaj zadanie</h2>
+    <form method="post" action="/tasks" class="form">
+      <label>Tytuł
+        <input name="title" required minlength="3" maxlength="120" placeholder="np. Przygotować demo" />
+      </label>
+
+      <label>Opis
+        <textarea name="description" rows="4" placeholder="Krótki opis..."></textarea>
+      </label>
+
+      <div class="row">
+        <label>Priorytet
+          <select name="priority">
+            <option>LOW</option>
+            <option selected>MEDIUM</option>
+            <option>HIGH</option>
+          </select>
+        </label>
+
+        <label>Termin
+          <input type="date" name="due_date_str" />
+        </label>
+      </div>
+
+      <button type="submit">Dodaj</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Tablica zadań</h2>
+
+    <div class="filters">
+      <a class="pill {{ 'active' if status_filter=='' else '' }}" href="/">Wszystkie</a>
+      <a class="pill {{ 'active' if status_filter=='TODO' else '' }}" href="/?status=TODO">To Do</a>
+      <a class="pill {{ 'active' if status_filter=='DOING' else '' }}" href="/?status=DOING">Doing</a>
+      <a class="pill {{ 'active' if status_filter=='DONE' else '' }}" href="/?status=DONE">Done</a>
+    </div>
+
+    {% if tasks|length == 0 %}
+      <p class="muted">Brak zadań. Dodaj pierwsze po lewej stronie.</p>
+    {% else %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Tytuł</th>
+            <th>Status</th>
+            <th>Priorytet</th>
+            <th>Termin</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in tasks %}
+          <tr>
+            <td>
+              <a href="/tasks/{{ t.id }}">{{ t.title }}</a>
+              <div class="muted small">utworzono: {{ t.created_at.strftime("%Y-%m-%d %H:%M") }}</div>
+            </td>
+            <td><span class="tag status-{{ t.status|lower }}">{{ t.status }}</span></td>
+            <td><span class="tag prio-{{ t.priority|lower }}">{{ t.priority }}</span></td>
+            <td>{{ t.due_date if t.due_date else "-" }}</td>
+            <td><a class="btn-link" href="/tasks/{{ t.id }}">Szczegóły →</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

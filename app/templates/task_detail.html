@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+  <div class="row space-between">
+    <div>
+      <h2>{{ task.title }}</h2>
+      <div class="muted">ID: {{ task.id }} • utworzono: {{ task.created_at.strftime("%Y-%m-%d %H:%M") }}</div>
+    </div>
+    <div class="row">
+      <a class="pill" href="/">← Wróć</a>
+      <form method="post" action="/tasks/{{ task.id }}/delete" onsubmit="return confirm('Usunąć zadanie?');">
+        <button class="danger" type="submit">Usuń</button>
+      </form>
+    </div>
+  </div>
+
+  <p class="muted">{{ task.description if task.description else "Brak opisu." }}</p>
+
+  <hr/>
+
+  <h3>Edycja</h3>
+  <form method="post" action="/tasks/{{ task.id }}/update" class="form">
+    <label>Tytuł
+      <input name="title" required minlength="3" maxlength="120" value="{{ task.title }}" />
+    </label>
+
+    <label>Opis
+      <textarea name="description" rows="4">{{ task.description }}</textarea>
+    </label>
+
+    <div class="row">
+      <label>Status
+        <select name="status">
+          <option value="TODO" {{ 'selected' if task.status=='TODO' else '' }}>TODO</option>
+          <option value="DOING" {{ 'selected' if task.status=='DOING' else '' }}>DOING</option>
+          <option value="DONE" {{ 'selected' if task.status=='DONE' else '' }}>DONE</option>
+        </select>
+      </label>
+
+      <label>Priorytet
+        <select name="priority">
+          <option value="LOW" {{ 'selected' if task.priority=='LOW' else '' }}>LOW</option>
+          <option value="MEDIUM" {{ 'selected' if task.priority=='MEDIUM' else '' }}>MEDIUM</option>
+          <option value="HIGH" {{ 'selected' if task.priority=='HIGH' else '' }}>HIGH</option>
+        </select>
+      </label>
+
+      <label>Termin
+        <input type="date" name="due_date_str" value="{{ task.due_date if task.due_date else '' }}" />
+      </label>
+    </div>
+
+    <button type="submit">Zapisz</button>
+  </form>
+</div>
+
+<section class="grid">
+  <div class="card">
+    <h3>Komentarze</h3>
+    <form method="post" action="/tasks/{{ task.id }}/comments" class="form">
+      <div class="row">
+        <label>Autor
+          <input name="author" value="Student" maxlength="80" />
+        </label>
+      </div>
+      <label>Treść
+        <textarea name="content" rows="3" required></textarea>
+      </label>
+      <button type="submit">Dodaj komentarz</button>
+    </form>
+
+    <hr/>
+
+    {% if task.comments|length == 0 %}
+      <p class="muted">Brak komentarzy.</p>
+    {% else %}
+      {% for c in task.comments %}
+        <div class="comment">
+          <div class="row space-between">
+            <strong>{{ c.author }}</strong>
+            <span class="muted small">{{ c.created_at.strftime("%Y-%m-%d %H:%M") }}</span>
+          </div>
+          <div>{{ c.content }}</div>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h3>Log aktywności</h3>
+    {% if task.activities|length == 0 %}
+      <p class="muted">Brak aktywności.</p>
+    {% else %}
+      <ul class="list">
+        {% for a in task.activities %}
+          <li>
+            <span class="tag">{{ a.event_type }}</span>
+            {{ a.message }}
+            <div class="muted small">{{ a.created_at.strftime("%Y-%m-%d %H:%M") }}</div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}
