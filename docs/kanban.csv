@@ -1,0 +1,11 @@
+id,title,type,status,owner,notes
+1,Zdefiniowanie problemu i zakresu MVP,Story,Done,Krystian,Opis w docs/problem_solution.md
+2,Utworzenie repo i struktury projektu,Task,Done,Krystian,README + foldery
+3,Model bazy danych (Task/Comment/Activity),Task,Done,Krystian,SQLAlchemy + SQLite
+4,Ekran listy zadań + filtr statusu,Story,Done,Krystian,Jinja2 templates
+5,Formularz dodawania zadania,Story,Done,Krystian,POST /tasks
+6,Szczegóły zadania + edycja,Story,Done,Krystian,POST /tasks/{id}/update
+7,Komentarze do zadania,Story,Done,Krystian,POST /tasks/{id}/comments
+8,Log aktywności (audit trail),Story,Done,Krystian,Activity table + widok w UI
+9,Testy manualne + poprawki UI,Task,Doing,Krystian,Sprawdzić przepływy TODO/DOING/DONE + komentarze
+10,Prezentacja + nagranie demo,Task,ToDo,Krystian,Slajdy PDF + OBS demo
