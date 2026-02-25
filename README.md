@@ -26,4 +26,4 @@ uvicorn app.main:app --reload
 ## Demo
 - Aplikacja: http://127.0.0.1:8000
 - Swagger (API): http://127.0.0.1:8000/docs
-- Wideo demo: (wkleję link po nagraniu)
+- Wideo demo: https://drive.google.com/drive/folders/1Pj6u0u1qZ-_0dN1g3kTsPVnoBkv_siO7?hl=pl
